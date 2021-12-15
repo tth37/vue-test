@@ -1,5 +1,5 @@
 <template>
-  <div class="block" @click="clickBlock">
+  <div class="block" @click="clickBlock" :class="{cheat: theme === 'cheatBlock' }">
     <div>FUCK ME!!</div>
   </div>
 </template>
@@ -9,6 +9,7 @@
 
 export default {
   name: 'Block',
+  props: [ 'theme' ],
   data() {
     return {
 
@@ -34,5 +35,9 @@ export default {
   justify-content: center;
   align-items: center;
 
+}
+
+.cheat {
+  background-color: red;
 }
 </style>

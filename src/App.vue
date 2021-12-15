@@ -5,6 +5,9 @@
     </Result>
   </div>
   <button v-show="!isPlaying" @click="playNewGame">play!</button>
+  <div v-if="isPlaying&&(!endOfCountDown)">
+    <Block @clickBlock="cheat" theme="cheatBlock" />
+  </div>
   <div v-if="endOfCountDown">
     <Block @clickBlock="clickBlock" />
   </div>
@@ -38,6 +41,8 @@ export default {
       this.endOfCountDown = false
       let pauseTime = randomNum(2000, 7000)
       setTimeout(() => {
+        if (this.isPlaying === false)
+          return
         this.endOfCountDown = true
         this.counter = Date.now()
       }, pauseTime)
@@ -45,6 +50,12 @@ export default {
     clickBlock() {
       this.endOfCountDown = false
       this.passedTime = Date.now() - this.counter
+      this.showResult = true
+      this.isPlaying = false
+    },
+    cheat() {
+      this.endOfCountDown = false
+      this.passedTime = 99999
       this.showResult = true
       this.isPlaying = false
     }

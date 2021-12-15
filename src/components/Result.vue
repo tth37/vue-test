@@ -20,6 +20,8 @@ export default {
   },
   computed: {
     getComment() {
+      if (this.score === 99999)
+        return 'Fuck!!! You cheat!!!! Fuckkk!'
       if (this.score >= 500) {
         return 'You! Vegetable! Fuck!'
       } else if (this.score >= 300) {
