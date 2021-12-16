@@ -1,26 +1,15 @@
 <template>
-  <h1>tth37 timer game!!!</h1>
-  <div v-if="showResult">
-    <Result :score="passedTime">
-    </Result>
-  </div>
-  <button v-show="!isPlaying" @click="playNewGame">play!</button>
-  <div v-if="isPlaying&&(!endOfCountDown)">
-    <Block @clickBlock="cheat" theme="cheatBlock" />
-  </div>
-  <div v-if="endOfCountDown">
-    <Block @clickBlock="clickBlock" />
-  </div>
+  <h1>Reaction Time Game v2</h1>
+  <Result :type="resultType" :score="resultScore" v-if="showResult" />
+  <button class="btn-play" :disabled="isPlaying" @click="startGame">Play!</button>
+  <Block v-if="isPlaying" :delay="delayTime" @clickBlock="clickBlock" />
+
 </template>
 
 <script>
 
-import Block from './components/Block'
-import Result from './components/Result'
-
-function randomNum(minNum, maxNum) {
-  return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
-}
+import Block from './components/Block.vue'
+import Result from './components/Result.vue'
 
 export default {
   name: 'App',
@@ -28,50 +17,63 @@ export default {
   data() {
     return {
       isPlaying: false,
-      endOfCountDown: false,
-      counter: 0,
-      showResult: false,
-      passedTime: 0,
+      delayTime: null,
+      resultType: 'fail',
+      resultScore: 0,
+      showResult: false
     }
+    
   },
   methods: {
-    playNewGame() {
-      this.showResult = false
+    startGame() {
+      this.delayTime = 2000 + Math.random() * 5000;
       this.isPlaying = true
-      this.endOfCountDown = false
-      let pauseTime = randomNum(2000, 7000)
-      setTimeout(() => {
-        if (this.isPlaying === false)
-          return
-        this.endOfCountDown = true
-        this.counter = Date.now()
-      }, pauseTime)
+      
+      
     },
-    clickBlock() {
-      this.endOfCountDown = false
-      this.passedTime = Date.now() - this.counter
-      this.showResult = true
+    clickBlock(score) {
       this.isPlaying = false
-    },
-    cheat() {
-      this.endOfCountDown = false
-      this.passedTime = 99999
+      if (score === -1) {
+        this.resultType = 'fail'
+        this.resultScore = 0
+        this.showResult = true
+        console.log('344')
+        return
+      }
+      this.resultType = 'success'
+      this.resultScore = score
       this.showResult = true
-      this.isPlaying = false
+      console.log('2333')
     }
-  },
-
+  }
 }
-
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped>
+  h1 {
+    text-align: center;
+    margin-top: 50px;
+  }
+  .btn-play {
+    display: block;
+    margin: 30px auto;
+    height: 35px;
+    width: 75px;
+    border-radius: 10px;
+    border: 0;
+    background-color: #abf54a;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px;
+  }
+  .btn-play:hover {
+    background-color: #86c03b;
+  }
+  .btn-play:active {
+    background-color: #86c03b;
+    transform: translateY(2px);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px;
+  }
+  .btn-play:disabled {
+    background-color: #dbfab3;
+  }
 </style>
